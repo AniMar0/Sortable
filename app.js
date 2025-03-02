@@ -36,15 +36,15 @@ function showeData(heros) {
       img.src = hero.images.xs;
       img.alt = hero.name;
 
-      const name = createElementWithText('div', hero.name, 'title');
-      const fullName = createElementWithText('div', hero.biography.fullName, 'title');
-      const powerstats = createElementWithText('div', Object.values(hero.powerstats).join(", "), 'title');
-      const race = createElementWithText('div', hero.appearance.race, 'title');
-      const gender = createElementWithText('div', hero.appearance.gender, 'title');
-      const height = createElementWithText('div', hero.appearance.height.join(' / '), 'title');
-      const weight = createElementWithText('div', hero.appearance.weight, 'title');
-      const birthPlace = createElementWithText('div', hero.biography.placeOfBirth, 'title');
-      const alignment = createElementWithText('div', hero.biography.alignment, 'title');
+      const name = createElementHelper('div', hero.name, 'title');
+      const fullName = createElementHelper('div', hero.biography.fullName, 'title');
+      const powerstats = createElementHelper('div', Object.values(hero.powerstats).join(", "), 'title');
+      const race = createElementHelper('div', hero.appearance.race, 'title');
+      const gender = createElementHelper('div', hero.appearance.gender, 'title');
+      const height = createElementHelper('div', hero.appearance.height.join(' / '), 'title');
+      const weight = createElementHelper('div', hero.appearance.weight, 'title');
+      const birthPlace = createElementHelper('div', hero.biography.placeOfBirth, 'title');
+      const alignment = createElementHelper('div', hero.biography.alignment, 'title');
 
       content.append(img, name, fullName, powerstats, race, gender, height, weight, birthPlace, alignment);
       linke.appendChild(content);
