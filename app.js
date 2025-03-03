@@ -1,16 +1,15 @@
-async function data() {
-  try {
-    const response = await fetch("https://rawcdn.githack.com/akabab/superhero-api/0.2.0/api/all.json");
+fetch("https://rawcdn.githack.com/akabab/superhero-api/0.2.0/api/all.json")
+  .then((response) => {
     if (!response.ok) throw new Error("Failed to fetch data");
-    return await response.json();
-  } catch (error) {
+    return response.json();
+  })
+  .then(main)
+  .catch((error) => {
     console.error("Error fetching heroes data:", error);
-    return [];
-  }
-}
+  });
 
-async function main() {
-  let heroes = await data();
+
+function main(heroes) {
   const select = document.getElementById("itemsPerPage");
 
   search(heroes)
@@ -73,48 +72,47 @@ function showHeros(heroes, start, end) {
     iconCell.appendChild(img);
 
     // Name
-    const nameCell = document.createElement('td');
-    nameCell.textContent = hero.name;
+    const nameCell = newElement('td', hero.name);
 
     // Full Name
-    const fullNameCell = document.createElement('td');
-    fullNameCell.textContent = hero.biography.fullName;
+    const fullNameCell = newElement('td', hero.biography.fullName);
 
     // Powerstats
-    const powerstatsCell = document.createElement('td');
-    const powerstatsText = Object.entries(hero.powerstats)
-      .map(([stat, value]) => `${stat}: ${value}`)
-      .join(' | ');
-    powerstatsCell.textContent = powerstatsText;
+    const intelligence = newElement('td', hero.powerstats['intelligence'])
+    const strength = newElement('td', hero.powerstats['strength'])
+    const speed = newElement('td', hero.powerstats['speed'])
+    const durability = newElement('td', hero.powerstats['durability'])
+    const power = newElement('td', hero.powerstats['power'])
+    const combat = newElement('td', hero.powerstats['combat'])
 
     // Race
-    const raceCell = document.createElement('td');
-    raceCell.textContent = hero.appearance.race;
+    const raceCell = newElement('td', hero.appearance.race);
 
     // Gender
-    const genderCell = document.createElement('td');
-    genderCell.textContent = hero.appearance.gender;
+    const genderCell = newElement('td', hero.appearance.gender);
 
     // Height
-    const heightCell = document.createElement('td');
-    heightCell.textContent = hero.appearance.height.join(' / ');
+    const heightCell = newElement('td', hero.appearance.height.join(' / '));
 
     // Weight
-    const weightCell = document.createElement('td');
-    weightCell.textContent = hero.appearance.weight.join(' / ');
+    const weightCell = newElement('td', hero.appearance.weight.join(' / '));
 
     // Place of Birth
-    const birthPlaceCell = document.createElement('td');
-    birthPlaceCell.textContent = hero.biography.placeOfBirth;
+    const birthPlaceCell = newElement('td', hero.biography.placeOfBirth);
 
     // Alignment
-    const alignmentCell = document.createElement('td');
-    alignmentCell.textContent = hero.biography.alignment;
+    const alignmentCell = newElement('td', hero.biography.alignment);
 
-    row.append(iconCell, nameCell, fullNameCell, powerstatsCell, raceCell, genderCell, heightCell, weightCell, birthPlaceCell, alignmentCell)
+    row.append(iconCell, nameCell, fullNameCell, intelligence, strength, speed, durability, power, combat, raceCell, genderCell, heightCell, weightCell, birthPlaceCell, alignmentCell)
     // Add the row to the table
     board.appendChild(row);
   });
+}
+
+function newElement(tag, text) {
+  const element = document.createElement(tag);
+  element.textContent = text;
+  return element
 }
 
 function createElementHelper(tag, text, className) {
@@ -137,14 +135,6 @@ function search(superheroes) {
     select.addEventListener('change', () => {
       showData(filteredHeroes, select.value);
     });
-    showData(filteredHeroes, filteredHeroes.length)
+    showData(filteredHeroes, select.value)
   });
 }
-
-
-// Function to filter results and display them
-
-
-// Add event listener for real-time filtering
-
-main();
