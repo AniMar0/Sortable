@@ -1,83 +1,35 @@
-/* استيراد خط مخصص */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+/* Styling the table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
 
-/* إعدادات عامة للصفحة */
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #121212;
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #333;
     color: #fff;
-    margin: 0;
-    padding: 20px;
-    text-align: center;
 }
 
-/* عنوان الصفحة */
-span {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #f39c12;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 20px;
-}
-
-/* تصميم شبكة الأبطال */
-#heroTableBody {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
-}
-
-/* تصميم بطاقة البطل */
-.articles__article {
+td {
     background-color: #1e1e1e;
-    border-radius: 10px;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
+    color: #fff;
 }
 
-.articles__article:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 15px rgba(255, 165, 0, 0.5);
-}
-
-/* رابط داخل البطاقة */
-.articles__link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    padding: 15px;
-}
-
-/* صورة البطل */
-.articles__img {
-    width: 100px;
-    height: 100px;
+td img {
     border-radius: 50%;
     object-fit: cover;
-    display: block;
-    margin: 10px auto;
-    border: 3px solid #f39c12;
 }
 
-/* نصوص البيانات */
-.title {
-    font-size: 1rem;
-    font-weight: 400;
-    margin: 5px 0;
-}
-
-/* تحسين العرض على الشاشات الصغيرة */
+/* Scrollable table for small screens */
 @media (max-width: 600px) {
-    #heroTableBody {
-        grid-template-columns: 1fr;
-    }
-    
-    .articles__article {
-        width: 90%;
-        margin: auto;
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
     }
 }
