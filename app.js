@@ -149,22 +149,13 @@ function ssss(sortedData) {
 
   sortebtn.addEventListener('click', (e) => {
     ascending = !ascending
-    const filteredHeroes = []
+    let filteredHeroes = []
 
     if (ascending) {
-      for (let index = 0; index < sortedData[e.target.id].length; index++) {
-        if (sortedData[e.target.id][index][1] != undefined) {
-          filteredHeroes.push(sortedData[e.target.id][index][1])
-        }
-      }
+      filteredHeroes = ss(sortedData[e.target.id],ascending)
     } else {
-      for (let index = sortedData[e.target.id].length-1; index >= 0 ; index--) {
-        if (sortedData[e.target.id][index][1] != undefined) {
-          filteredHeroes.push(sortedData[e.target.id][index][1])
-        }
-      }
+      filteredHeroes = ss(sortedData[e.target.id],ascending)
     }
-    
 
     const select = document.getElementById("itemsPerPage");
 
@@ -174,6 +165,37 @@ function ssss(sortedData) {
 
     showData(filteredHeroes, select.value);
   });
+}
+
+function check(params) {
+  if (params == '' || params == '-' || params == "0 cm"||params == 'o kg' ){
+    return false
+  }
+  return true
+}
+
+function ss(sortedData,ascending) {
+  const filteredHeroes = []
+    const emptis = []
+    if (ascending) {
+      for (let index = 0; index < sortedData.length; index++) {
+        if (check(sortedData[index][0])){
+          filteredHeroes.push(sortedData[index][1])
+        }else{
+          emptis.push(sortedData[index][1])
+        }
+      }
+    } else {
+      for (let index = sortedData.length-1; index > 0; index--) {
+        if (check(sortedData[index][0])){
+          filteredHeroes.push(sortedData[index][1])
+        }else{
+          emptis.push(sortedData[index][1])
+        }
+      }
+    }
+  
+  return filteredHeroes.concat(emptis)
 }
 
 function sortHeros(heros) {
