@@ -180,7 +180,7 @@ function mainFuncSorte(sortedData) {
 }
 
 function isEmpti(params) {
-  if (params == '' || params == '-' || params == "0 cm" || params == 'o kg') {
+  if (params == '' || params == '-' || params == "0 cm" || params == '0 kg') {
     return false
   }
   return true
