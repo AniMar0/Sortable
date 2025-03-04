@@ -145,14 +145,26 @@ function search(superheroes) {
 
 function ssss(sortedData) {
   const sortebtn = document.getElementById('sorte')
-  sortebtn.addEventListener('click', (e) => {
+  let ascending = false
 
+  sortebtn.addEventListener('click', (e) => {
+    ascending = !ascending
     const filteredHeroes = []
-    for (let index = 0; index < sortedData[e.target.id].length; index++) {
-      if (sortedData[e.target.id][index][1] != undefined) {
-        filteredHeroes.push(sortedData[e.target.id][index][1])
+
+    if (ascending) {
+      for (let index = 0; index < sortedData[e.target.id].length; index++) {
+        if (sortedData[e.target.id][index][1] != undefined) {
+          filteredHeroes.push(sortedData[e.target.id][index][1])
+        }
+      }
+    } else {
+      for (let index = sortedData[e.target.id].length-1; index >= 0 ; index--) {
+        if (sortedData[e.target.id][index][1] != undefined) {
+          filteredHeroes.push(sortedData[e.target.id][index][1])
+        }
       }
     }
+    
 
     const select = document.getElementById("itemsPerPage");
 
@@ -199,13 +211,13 @@ function sortHeros(heros) {
     SortedHerosafter.Alignment.push([hero.biography.alignment || "", hero]);
   });
 
-  
+
   const sortNumbers = (arr) => arr.sort((a, b) => a[0] - b[0]);
 
- 
+
   const sortStrings = (arr) => arr.sort((a, b) => a[0].localeCompare(b[0]));
 
-  
+
   SortedHerosafter.Name = sortStrings(SortedHerosafter.Name);
   SortedHerosafter.FullName = sortStrings(SortedHerosafter.FullName);
   SortedHerosafter.Race = sortStrings(SortedHerosafter.Race);
@@ -215,7 +227,7 @@ function sortHeros(heros) {
   SortedHerosafter.PlaceOfBirth = sortStrings(SortedHerosafter.PlaceOfBirth);
   SortedHerosafter.Alignment = sortStrings(SortedHerosafter.Alignment);
 
-  
+
   SortedHerosafter.Intelligence = sortNumbers(SortedHerosafter.Intelligence);
   SortedHerosafter.Strength = sortNumbers(SortedHerosafter.Strength);
   SortedHerosafter.Speed = sortNumbers(SortedHerosafter.Speed);
