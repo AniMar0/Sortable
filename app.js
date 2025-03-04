@@ -144,9 +144,24 @@ function search(superheroes) {
 }
 
 function mainFuncSorte(sortedData) {
-  const sortebtn = document.getElementById('sorte')
+  const sortebtn = document.getElementById('sorte2')
+  const sortebtn1 = document.getElementById('sorte')
   let ascending = false
+  sortebtn1.addEventListener('click', (e) => {
+    if (e.target.id != "") {
+      ascending = !ascending
 
+      const filteredHeroes =  sorteHelper(sortedData[e.target.id], ascending)
+
+      const select = document.getElementById("itemsPerPage");
+
+      select.addEventListener('change', () => {
+        showData(filteredHeroes, select.value);
+      });
+
+      showData(filteredHeroes, select.value);
+    }
+  });
   sortebtn.addEventListener('click', (e) => {
     if (e.target.id != "") {
       ascending = !ascending
