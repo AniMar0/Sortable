@@ -40,7 +40,7 @@ function showData(heroes, count) {
 
   //rake hna
   for (let index = 1; index <= numberOfPages; index++) {
-    const btn = createElementHelper('button', '' + index, '' + index)
+    const btn = createElement('button', '' + index, '' + index)
     fragmentPages.append(btn)
   }
   selectPgae.appendChild(fragmentPages)
@@ -76,36 +76,36 @@ function showHeros(heroes, start, end) {
     iconCell.appendChild(img);
 
     // Name
-    const nameCell = newElement('td', hero.name);
+    const nameCell = createElement('td', hero.name);
 
     // Full Name
-    const fullNameCell = newElement('td', hero.biography.fullName);
+    const fullNameCell = createElement('td', hero.biography.fullName);
 
     // Powerstats
-    const intelligence = newElement('td', hero.powerstats['intelligence'])
-    const strength = newElement('td', hero.powerstats['strength'])
-    const speed = newElement('td', hero.powerstats['speed'])
-    const durability = newElement('td', hero.powerstats['durability'])
-    const power = newElement('td', hero.powerstats['power'])
-    const combat = newElement('td', hero.powerstats['combat'])
+    const intelligence = createElement('td', hero.powerstats['intelligence'])
+    const strength = createElement('td', hero.powerstats['strength'])
+    const speed = createElement('td', hero.powerstats['speed'])
+    const durability = createElement('td', hero.powerstats['durability'])
+    const power = createElement('td', hero.powerstats['power'])
+    const combat = createElement('td', hero.powerstats['combat'])
 
     // Race
-    const raceCell = newElement('td', hero.appearance.race);
+    const raceCell = createElement('td', hero.appearance.race);
 
     // Gender
-    const genderCell = newElement('td', hero.appearance.gender);
+    const genderCell = createElement('td', hero.appearance.gender);
 
     // Height
-    const heightCell = newElement('td', hero.appearance.height.join(' / '));
+    const heightCell = createElement('td', hero.appearance.height.join(' / '));
 
     // Weight
-    const weightCell = newElement('td', hero.appearance.weight.join(' / '));
+    const weightCell = createElement('td', hero.appearance.weight.join(' / '));
 
     // Place of Birth
-    const birthPlaceCell = newElement('td', hero.biography.placeOfBirth);
+    const birthPlaceCell = createElement('td', hero.biography.placeOfBirth);
 
     // Alignment
-    const alignmentCell = newElement('td', hero.biography.alignment);
+    const alignmentCell = createElement('td', hero.biography.alignment);
 
     row.append(iconCell, nameCell, fullNameCell, intelligence, strength, speed, durability, power, combat, raceCell, genderCell, heightCell, weightCell, birthPlaceCell, alignmentCell)
     // Add the row to the table
@@ -113,19 +113,14 @@ function showHeros(heroes, start, end) {
   });
 }
 
-function newElement(tag, text) {
+function createElement(tag, text, id = '', className = '') {
   const element = document.createElement(tag);
   element.textContent = text;
-  return element
+  if (id) element.id = id;
+  if (className) element.className = className;
+  return element;
 }
 
-function createElementHelper(tag, text, className) {
-  const element = document.createElement(tag);
-  element.textContent = text;
-  element.id = className;
-  element.value = text
-  return element
-}
 
 function search(superheroes) {
   let searchText = []
@@ -151,7 +146,7 @@ function mainFuncSorte(sortedData) {
     if (e.target.id != "") {
       ascending = !ascending
 
-      const filteredHeroes =  sorteHelper(sortedData[e.target.id], ascending)
+      const filteredHeroes = sorteHelper(sortedData[e.target.id], ascending)
 
       const select = document.getElementById("itemsPerPage");
 
@@ -166,7 +161,7 @@ function mainFuncSorte(sortedData) {
     if (e.target.id != "") {
       ascending = !ascending
 
-      const filteredHeroes =  sorteHelper(sortedData[e.target.id], ascending)
+      const filteredHeroes = sorteHelper(sortedData[e.target.id], ascending)
 
       const select = document.getElementById("itemsPerPage");
 
@@ -179,11 +174,8 @@ function mainFuncSorte(sortedData) {
   });
 }
 
-function isEmpti(params) {
-  if (params == '' || params == '-' || params == "0 cm" || params == '0 kg') {
-    return false
-  }
-  return true
+function isEmpti(value) {
+  return !(value === '' || value === '-' || value == "0");
 }
 
 function sorteHelper(sortedData, ascending) {
@@ -239,8 +231,8 @@ function sortHeros(heros) {
     SortedHerosafter.Combat.push([parseInt(hero.powerstats.combat) || 0, hero]);
     SortedHerosafter.Race.push([hero.appearance.race || "", hero]);
     SortedHerosafter.Gender.push([hero.appearance.gender || "", hero]);
-    SortedHerosafter.Height.push([hero.appearance.height[1] || "", hero]);
-    SortedHerosafter.Weight.push([hero.appearance.weight[1] || "", hero]);
+    SortedHerosafter.Height.push([cmTometers(hero.appearance.height[1],hero) || 0, hero]);
+    SortedHerosafter.Weight.push([klg(hero.appearance.weight[1]) || 0, hero]);
     SortedHerosafter.PlaceOfBirth.push([hero.biography.placeOfBirth || "", hero]);
     SortedHerosafter.Alignment.push([hero.biography.alignment || "", hero]);
   });
@@ -256,8 +248,8 @@ function sortHeros(heros) {
   SortedHerosafter.FullName = sortStrings(SortedHerosafter.FullName);
   SortedHerosafter.Race = sortStrings(SortedHerosafter.Race);
   SortedHerosafter.Gender = sortStrings(SortedHerosafter.Gender);
-  SortedHerosafter.Height = sortStrings(SortedHerosafter.Height);
-  SortedHerosafter.Weight = sortStrings(SortedHerosafter.Weight);
+  SortedHerosafter.Height = sortNumbers(SortedHerosafter.Height);
+  SortedHerosafter.Weight = sortNumbers(SortedHerosafter.Weight);
   SortedHerosafter.PlaceOfBirth = sortStrings(SortedHerosafter.PlaceOfBirth);
   SortedHerosafter.Alignment = sortStrings(SortedHerosafter.Alignment);
 
@@ -270,4 +262,23 @@ function sortHeros(heros) {
   SortedHerosafter.Combat = sortNumbers(SortedHerosafter.Combat);
 
   return SortedHerosafter;
+}
+
+function cmTometers(height) {
+  if (height == undefined){
+    return 0
+  }
+  let cm = height.slice(-2)
+  if ( cm == "cm") {
+      return parseFloat(height.match(/\d+(\.\d+)?/g).join(''))
+  }
+  return parseFloat(height.match(/\d+(\.\d+)?/g).join(''))*100
+}
+
+function klg(Weight){
+  let kg = Weight.slice(-2)
+  if ( kg == "kg") {
+      return parseFloat(Weight.match(/\d+(\.\d+)?/g).join(''))
+  }
+  return parseFloat(Weight.match(/\d+(\.\d+)?/g).join(''))*1000
 }
