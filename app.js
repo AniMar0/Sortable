@@ -10,11 +10,13 @@ fetch("https://rawcdn.githack.com/akabab/superhero-api/0.2.0/api/all.json")
 
 
 function main(heroes) {
-  sortedData = sortHeros(heroes)
+  let sortedData = sortHeros(heroes)
 
   const select = document.getElementById("itemsPerPage");
 
-  search(heroes)
+  ssss(sortedData);
+
+  search(heroes);
 
   // Listen for change in selection
   select.addEventListener('change', () => {
@@ -141,56 +143,85 @@ function search(superheroes) {
   });
 }
 
-function sortHeros(heros) {
+function ssss(sortedData) {
+  const sortebtn = document.getElementById('sorte')
+  sortebtn.addEventListener('click', (e) => {
 
+    const filteredHeroes = []
+    for (let index = 0; index < sortedData[e.target.id].length; index++) {
+      if (sortedData[e.target.id][index][1] != undefined) {
+        filteredHeroes.push(sortedData[e.target.id][index][1])
+      }
+    }
+
+    const select = document.getElementById("itemsPerPage");
+
+    select.addEventListener('change', () => {
+      showData(filteredHeroes, select.value);
+    });
+
+    showData(filteredHeroes, select.value);
+  });
+}
+
+function sortHeros(heros) {
   let SortedHerosafter = {
     Name: [],
     FullName: [],
-    intelligence: [],
-    strength: [],
-    speed: [],
-    durability: [],
-    power: [],
-    combat: [],
+    Intelligence: [],
+    Strength: [],
+    Speed: [],
+    Durability: [],
+    Power: [],
+    Combat: [],
     Race: [],
     Gender: [],
     Height: [],
     Weight: [],
-    PlaceofBirth: [],
+    PlaceOfBirth: [],
     Alignment: []
-  }
+  };
 
-  heros.map((hero) => {
-    SortedHerosafter.Name.push(hero.name)
-    SortedHerosafter.FullName.push(hero.biography.fullName)
-    SortedHerosafter.intelligence.push(hero.powerstats['intelligence'])
-    SortedHerosafter.strength.push(hero.powerstats['strength'])
-    SortedHerosafter.speed.push(hero.powerstats['speed'])
-    SortedHerosafter.durability.push(hero.powerstats['durability'])
-    SortedHerosafter.power.push(hero.powerstats['power'])
-    SortedHerosafter.combat.push(hero.powerstats['combat'])
-    SortedHerosafter.Race.push(hero.appearance.race)
-    SortedHerosafter.Gender.push(hero.appearance.gender)
-    SortedHerosafter.Height.push(hero.appearance.height[1])
-    SortedHerosafter.Weight.push(hero.appearance.weight[1])
-    SortedHerosafter.PlaceofBirth.push(hero.biography.placeOfBirth)
-    SortedHerosafter.Alignment.push(hero.biography.alignment)
-  })
+  heros.forEach((hero) => {
+    SortedHerosafter.Name.push([hero.name, hero]);
+    SortedHerosafter.FullName.push([hero.biography.fullName, hero]);
+    SortedHerosafter.Intelligence.push([parseInt(hero.powerstats.intelligence) || 0, hero]);
+    SortedHerosafter.Strength.push([parseInt(hero.powerstats.strength) || 0, hero]);
+    SortedHerosafter.Speed.push([parseInt(hero.powerstats.speed) || 0, hero]);
+    SortedHerosafter.Durability.push([parseInt(hero.powerstats.durability) || 0, hero]);
+    SortedHerosafter.Power.push([parseInt(hero.powerstats.power) || 0, hero]);
+    SortedHerosafter.Combat.push([parseInt(hero.powerstats.combat) || 0, hero]);
+    SortedHerosafter.Race.push([hero.appearance.race || "", hero]);
+    SortedHerosafter.Gender.push([hero.appearance.gender || "", hero]);
+    SortedHerosafter.Height.push([hero.appearance.height[1] || "", hero]);
+    SortedHerosafter.Weight.push([hero.appearance.weight[1] || "", hero]);
+    SortedHerosafter.PlaceOfBirth.push([hero.biography.placeOfBirth || "", hero]);
+    SortedHerosafter.Alignment.push([hero.biography.alignment || "", hero]);
+  });
 
-  SortedHerosafter.Name = [...SortedHerosafter.Name.sort()]
-  SortedHerosafter.FullName = [...SortedHerosafter.FullName.sort()]
-  SortedHerosafter.intelligence = [...SortedHerosafter.intelligence.sort()]
-  SortedHerosafter.strength = [...SortedHerosafter.strength.sort()]
-  SortedHerosafter.speed = [...SortedHerosafter.speed.sort()]
-  SortedHerosafter.durability = [...SortedHerosafter.durability.sort()]
-  SortedHerosafter.power = [...SortedHerosafter.power.sort()]
-  SortedHerosafter.combat = [...SortedHerosafter.combat.sort()]
-  SortedHerosafter.Race = [...SortedHerosafter.Race.sort()]
-  SortedHerosafter.Gender = [...SortedHerosafter.Gender.sort()]
-  SortedHerosafter.Height = [...SortedHerosafter.Height.sort()]
-  SortedHerosafter.Weight = [...SortedHerosafter.Weight.sort()]
-  SortedHerosafter.PlaceofBirth = [...SortedHerosafter.PlaceofBirth.sort()]
-  SortedHerosafter.Alignment = [...SortedHerosafter.Alignment.sort()]
+  
+  const sortNumbers = (arr) => arr.sort((a, b) => a[0] - b[0]);
 
-  return SortedHerosafter
+ 
+  const sortStrings = (arr) => arr.sort((a, b) => a[0].localeCompare(b[0]));
+
+  
+  SortedHerosafter.Name = sortStrings(SortedHerosafter.Name);
+  SortedHerosafter.FullName = sortStrings(SortedHerosafter.FullName);
+  SortedHerosafter.Race = sortStrings(SortedHerosafter.Race);
+  SortedHerosafter.Gender = sortStrings(SortedHerosafter.Gender);
+  SortedHerosafter.Height = sortStrings(SortedHerosafter.Height);
+  SortedHerosafter.Weight = sortStrings(SortedHerosafter.Weight);
+  SortedHerosafter.PlaceOfBirth = sortStrings(SortedHerosafter.PlaceOfBirth);
+  SortedHerosafter.Alignment = sortStrings(SortedHerosafter.Alignment);
+
+  
+  SortedHerosafter.Intelligence = sortNumbers(SortedHerosafter.Intelligence);
+  SortedHerosafter.Strength = sortNumbers(SortedHerosafter.Strength);
+  SortedHerosafter.Speed = sortNumbers(SortedHerosafter.Speed);
+  SortedHerosafter.Durability = sortNumbers(SortedHerosafter.Durability);
+  SortedHerosafter.Power = sortNumbers(SortedHerosafter.Power);
+  SortedHerosafter.Combat = sortNumbers(SortedHerosafter.Combat);
+
+  return SortedHerosafter;
 }
