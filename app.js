@@ -148,53 +148,55 @@ function ssss(sortedData) {
   let ascending = false
 
   sortebtn.addEventListener('click', (e) => {
-    ascending = !ascending
-    let filteredHeroes = []
+    if (e.target.id != "") {
+      ascending = !ascending
+      let filteredHeroes = []
 
-    if (ascending) {
-      filteredHeroes = ss(sortedData[e.target.id],ascending)
-    } else {
-      filteredHeroes = ss(sortedData[e.target.id],ascending)
-    }
+      if (ascending) {
+        filteredHeroes = ss(sortedData[e.target.id], ascending)
+      } else {
+        filteredHeroes = ss(sortedData[e.target.id], ascending)
+      }
 
-    const select = document.getElementById("itemsPerPage");
+      const select = document.getElementById("itemsPerPage");
 
-    select.addEventListener('change', () => {
+      select.addEventListener('change', () => {
+        showData(filteredHeroes, select.value);
+      });
+
       showData(filteredHeroes, select.value);
-    });
-
-    showData(filteredHeroes, select.value);
+    }
   });
 }
 
 function check(params) {
-  if (params == '' || params == '-' || params == "0 cm"||params == 'o kg' ){
+  if (params == '' || params == '-' || params == "0 cm" || params == 'o kg') {
     return false
   }
   return true
 }
 
-function ss(sortedData,ascending) {
+function ss(sortedData, ascending) {
   const filteredHeroes = []
-    const emptis = []
-    if (ascending) {
-      for (let index = 0; index < sortedData.length; index++) {
-        if (check(sortedData[index][0])){
-          filteredHeroes.push(sortedData[index][1])
-        }else{
-          emptis.push(sortedData[index][1])
-        }
-      }
-    } else {
-      for (let index = sortedData.length-1; index > 0; index--) {
-        if (check(sortedData[index][0])){
-          filteredHeroes.push(sortedData[index][1])
-        }else{
-          emptis.push(sortedData[index][1])
-        }
+  const emptis = []
+  if (ascending) {
+    for (let index = 0; index < sortedData.length; index++) {
+      if (check(sortedData[index][0])) {
+        filteredHeroes.push(sortedData[index][1])
+      } else {
+        emptis.push(sortedData[index][1])
       }
     }
-  
+  } else {
+    for (let index = sortedData.length - 1; index > 0; index--) {
+      if (check(sortedData[index][0])) {
+        filteredHeroes.push(sortedData[index][1])
+      } else {
+        emptis.push(sortedData[index][1])
+      }
+    }
+  }
+
   return filteredHeroes.concat(emptis)
 }
 
