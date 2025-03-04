@@ -19,7 +19,6 @@ function main(heroes) {
 function showData(heroes, count) {
   const numberOfHeroes = count === 'all' ? heroes.length : parseInt(count);
   const numberOfPages = Math.ceil(heroes.length / numberOfHeroes)
-
   const selectPgae = document.getElementById('pages')
   selectPgae.innerHTML = ""
 
@@ -104,13 +103,17 @@ function search(superheroes) {
   const searchBox = document.getElementById('search')
   searchBox.addEventListener('input', (e) => {
     const query = document.getElementById('search').value.toLowerCase();
+
     const filteredHeroes = superheroes.filter(hero => hero.name.toLowerCase().includes(query)); searchText.push(e.data)
 
     const select = document.getElementById("itemsPerPage");
+    const herosSorted = sortHeros(filteredHeroes)
 
     select.addEventListener('change', () => {
+      mainFuncSorte(herosSorted)
       showData(filteredHeroes, select.value);
     });
+    mainFuncSorte(herosSorted)
     showData(filteredHeroes, select.value)
   });
 }
@@ -156,14 +159,8 @@ function sorteHelper(sortedData, ascending) {
 
 function sortHeros(heros) {
   let SortedHerosafter = {
-    Name: [],
-    FullName: [],
-    Intelligence: [],
-    Strength: [],
-    Speed: [],
-    Durability: [],
-    Power: [],
-    Combat: [],
+    Name: [], FullName: [],
+    Intelligence: [], Strength: [], Speed: [], Durability: [], Power: [], Combat: [],
     Race: [],
     Gender: [],
     Height: [],
@@ -189,12 +186,9 @@ function sortHeros(heros) {
     SortedHerosafter.Alignment.push([hero.biography.alignment || "", hero]);
   });
 
-
   const sortNumbers = (arr) => arr.sort((a, b) => a[0] - b[0]);
 
-
   const sortStrings = (arr) => arr.sort((a, b) => a[0].localeCompare(b[0]));
-
 
   SortedHerosafter.Name = sortStrings(SortedHerosafter.Name);
   SortedHerosafter.FullName = sortStrings(SortedHerosafter.FullName);
