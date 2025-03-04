@@ -1,13 +1,4 @@
-fetch("https://rawcdn.githack.com/akabab/superhero-api/0.2.0/api/all.json")
-  .then((response) => {
-    if (!response.ok) throw new Error("Failed to fetch data");
-    return response.json();
-  })
-  .then(main)
-  .catch((error) => {
-    console.error("Error fetching heroes data:", error);
-  });
-
+fetch("https://rawcdn.githack.com/akabab/superhero-api/0.2.0/api/all.json").then((response) => { return response.json() }).then(main)
 
 function main(heroes) {
   let sortedData = sortHeros(heroes)
@@ -18,27 +9,22 @@ function main(heroes) {
 
   search(heroes);
 
-  // Listen for change in selection
   select.addEventListener('change', () => {
     showData(heroes, select.value);
   });
 
-  // Initial rendering
   showData(heroes, select.value);
 }
 
 function showData(heroes, count) {
-  // Determine how many heroes to display
   const numberOfHeroes = count === 'all' ? heroes.length : parseInt(count);
   const numberOfPages = Math.ceil(heroes.length / numberOfHeroes)
 
-  //matouchiche
   const selectPgae = document.getElementById('pages')
   selectPgae.innerHTML = ""
 
   const fragmentPages = document.createDocumentFragment()
 
-  //rake hna
   for (let index = 1; index <= numberOfPages; index++) {
     const btn = createElement('button', '' + index, '' + index)
     fragmentPages.append(btn)
@@ -59,6 +45,7 @@ function showData(heroes, count) {
 }
 
 function showHeros(heroes, start, end) {
+  const fragment = document.createDocumentFragment()
   const board = document.getElementById('heroTableBody');
   board.innerHTML = '';
 
@@ -66,22 +53,19 @@ function showHeros(heroes, start, end) {
 
   selectedHeroes.forEach((hero) => {
     const row = document.createElement('tr');
-    // Icon
+
     const iconCell = document.createElement('td');
     const img = document.createElement('img');
     img.src = hero.images.xs;
     img.alt = hero.name;
-    img.style.width = '50px'; // Set a consistent size for the icon
+    img.style.width = '50px';
     img.style.height = '50px';
     iconCell.appendChild(img);
 
-    // Name
     const nameCell = createElement('td', hero.name);
 
-    // Full Name
     const fullNameCell = createElement('td', hero.biography.fullName);
 
-    // Powerstats
     const intelligence = createElement('td', hero.powerstats['intelligence'])
     const strength = createElement('td', hero.powerstats['strength'])
     const speed = createElement('td', hero.powerstats['speed'])
@@ -89,28 +73,22 @@ function showHeros(heroes, start, end) {
     const power = createElement('td', hero.powerstats['power'])
     const combat = createElement('td', hero.powerstats['combat'])
 
-    // Race
     const raceCell = createElement('td', hero.appearance.race);
 
-    // Gender
     const genderCell = createElement('td', hero.appearance.gender);
 
-    // Height
     const heightCell = createElement('td', hero.appearance.height.join(' / '));
 
-    // Weight
     const weightCell = createElement('td', hero.appearance.weight.join(' / '));
 
-    // Place of Birth
     const birthPlaceCell = createElement('td', hero.biography.placeOfBirth);
 
-    // Alignment
     const alignmentCell = createElement('td', hero.biography.alignment);
 
     row.append(iconCell, nameCell, fullNameCell, intelligence, strength, speed, durability, power, combat, raceCell, genderCell, heightCell, weightCell, birthPlaceCell, alignmentCell)
-    // Add the row to the table
-    board.appendChild(row);
+    fragment.appendChild(row)
   });
+  board.appendChild(fragment);
 }
 
 function createElement(tag, text, id = '', className = '') {
@@ -120,7 +98,6 @@ function createElement(tag, text, id = '', className = '') {
   if (className) element.className = className;
   return element;
 }
-
 
 function search(superheroes) {
   let searchText = []
@@ -139,28 +116,13 @@ function search(superheroes) {
 }
 
 function mainFuncSorte(sortedData) {
-  const sortebtn = document.getElementById('sorte2')
-  const sortebtn1 = document.getElementById('sorte')
-  let ascending = false
-  sortebtn1.addEventListener('click', (e) => {
-    if (e.target.id != "") {
-      ascending = !ascending
-
-      const filteredHeroes = sorteHelper(sortedData[e.target.id], ascending)
-
-      const select = document.getElementById("itemsPerPage");
-
-      select.addEventListener('change', () => {
-        showData(filteredHeroes, select.value);
-      });
-
-      showData(filteredHeroes, select.value);
-    }
-  });
+  const sortebtn = document.getElementById('sorte')
+  let ascending = true
+  let lastCol = ""
   sortebtn.addEventListener('click', (e) => {
     if (e.target.id != "") {
-      ascending = !ascending
-
+      ascending = lastCol === e.target.id ? !ascending : true;
+      lastCol = e.target.id
       const filteredHeroes = sorteHelper(sortedData[e.target.id], ascending)
 
       const select = document.getElementById("itemsPerPage");
@@ -179,27 +141,17 @@ function isEmpti(value) {
 }
 
 function sorteHelper(sortedData, ascending) {
-  const filteredHeroes = []
-  const emptis = []
-  if (ascending) {
-    for (let index = 0; index < sortedData.length; index++) {
-      if (isEmpti(sortedData[index][0])) {
-        filteredHeroes.push(sortedData[index][1])
-      } else {
-        emptis.push(sortedData[index][1])
-      }
-    }
-  } else {
-    for (let index = sortedData.length - 1; index > 0; index--) {
-      if (isEmpti(sortedData[index][0])) {
-        filteredHeroes.push(sortedData[index][1])
-      } else {
-        emptis.push(sortedData[index][1])
-      }
-    }
+  const filteredHeroes = [];
+  const emptis = [];
+  const start = ascending ? 0 : sortedData.length - 1;
+  const end = ascending ? sortedData.length : -1;
+  const step = ascending ? 1 : -1;
+
+  for (let index = start; index !== end; index += step) {
+    (isEmpti(sortedData[index][0]) ? filteredHeroes : emptis).push(sortedData[index][1]);
   }
 
-  return filteredHeroes.concat(emptis)
+  return filteredHeroes.concat(emptis);
 }
 
 function sortHeros(heros) {
@@ -231,7 +183,7 @@ function sortHeros(heros) {
     SortedHerosafter.Combat.push([parseInt(hero.powerstats.combat) || 0, hero]);
     SortedHerosafter.Race.push([hero.appearance.race || "", hero]);
     SortedHerosafter.Gender.push([hero.appearance.gender || "", hero]);
-    SortedHerosafter.Height.push([cmTometers(hero.appearance.height[1],hero) || 0, hero]);
+    SortedHerosafter.Height.push([cmTometers(hero.appearance.height[1]) || 0, hero]);
     SortedHerosafter.Weight.push([klg(hero.appearance.weight[1]) || 0, hero]);
     SortedHerosafter.PlaceOfBirth.push([hero.biography.placeOfBirth || "", hero]);
     SortedHerosafter.Alignment.push([hero.biography.alignment || "", hero]);
@@ -248,12 +200,11 @@ function sortHeros(heros) {
   SortedHerosafter.FullName = sortStrings(SortedHerosafter.FullName);
   SortedHerosafter.Race = sortStrings(SortedHerosafter.Race);
   SortedHerosafter.Gender = sortStrings(SortedHerosafter.Gender);
-  SortedHerosafter.Height = sortNumbers(SortedHerosafter.Height);
-  SortedHerosafter.Weight = sortNumbers(SortedHerosafter.Weight);
   SortedHerosafter.PlaceOfBirth = sortStrings(SortedHerosafter.PlaceOfBirth);
   SortedHerosafter.Alignment = sortStrings(SortedHerosafter.Alignment);
 
-
+  SortedHerosafter.Height = sortNumbers(SortedHerosafter.Height);
+  SortedHerosafter.Weight = sortNumbers(SortedHerosafter.Weight);
   SortedHerosafter.Intelligence = sortNumbers(SortedHerosafter.Intelligence);
   SortedHerosafter.Strength = sortNumbers(SortedHerosafter.Strength);
   SortedHerosafter.Speed = sortNumbers(SortedHerosafter.Speed);
@@ -265,20 +216,10 @@ function sortHeros(heros) {
 }
 
 function cmTometers(height) {
-  if (height == undefined){
-    return 0
-  }
-  let cm = height.slice(-2)
-  if ( cm == "cm") {
-      return parseFloat(height.match(/\d+(\.\d+)?/g).join(''))
-  }
-  return parseFloat(height.match(/\d+(\.\d+)?/g).join(''))*100
+  if (!height) return 0;
+  return height.includes("cm") ? parseFloat(height) : parseFloat(height) * 100;
 }
 
-function klg(Weight){
-  let kg = Weight.slice(-2)
-  if ( kg == "kg") {
-      return parseFloat(Weight.match(/\d+(\.\d+)?/g).join(''))
-  }
-  return parseFloat(Weight.match(/\d+(\.\d+)?/g).join(''))*1000
+function klg(weight) {
+  return weight.includes("kg") ? parseFloat(weight) : parseFloat(weight) * 1000;
 }
