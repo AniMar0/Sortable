@@ -14,7 +14,7 @@ function main(heroes) {
 
   const select = document.getElementById("itemsPerPage");
 
-  ssss(sortedData);
+  mainFuncSorte(sortedData);
 
   search(heroes);
 
@@ -143,20 +143,15 @@ function search(superheroes) {
   });
 }
 
-function ssss(sortedData) {
+function mainFuncSorte(sortedData) {
   const sortebtn = document.getElementById('sorte')
   let ascending = false
 
   sortebtn.addEventListener('click', (e) => {
     if (e.target.id != "") {
       ascending = !ascending
-      let filteredHeroes = []
 
-      if (ascending) {
-        filteredHeroes = ss(sortedData[e.target.id], ascending)
-      } else {
-        filteredHeroes = ss(sortedData[e.target.id], ascending)
-      }
+      const filteredHeroes =  sorteHelper(sortedData[e.target.id], ascending)
 
       const select = document.getElementById("itemsPerPage");
 
@@ -169,19 +164,19 @@ function ssss(sortedData) {
   });
 }
 
-function check(params) {
+function isEmpti(params) {
   if (params == '' || params == '-' || params == "0 cm" || params == 'o kg') {
     return false
   }
   return true
 }
 
-function ss(sortedData, ascending) {
+function sorteHelper(sortedData, ascending) {
   const filteredHeroes = []
   const emptis = []
   if (ascending) {
     for (let index = 0; index < sortedData.length; index++) {
-      if (check(sortedData[index][0])) {
+      if (isEmpti(sortedData[index][0])) {
         filteredHeroes.push(sortedData[index][1])
       } else {
         emptis.push(sortedData[index][1])
@@ -189,7 +184,7 @@ function ss(sortedData, ascending) {
     }
   } else {
     for (let index = sortedData.length - 1; index > 0; index--) {
-      if (check(sortedData[index][0])) {
+      if (isEmpti(sortedData[index][0])) {
         filteredHeroes.push(sortedData[index][1])
       } else {
         emptis.push(sortedData[index][1])
