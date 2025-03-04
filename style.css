@@ -1,39 +1,51 @@
+/* تحسين مظهر الجدول وجعله متجاوبًا */
 body {
     font-family: Arial, sans-serif;
     background-color: #f8f9fa;
-    color: #333;
-    text-align: center;
+    margin: 0;
     padding: 20px;
+    text-align: center;
 }
 
+span {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+}
 
 input[type="search"] {
-    width: 300px;
-    padding: 10px;
-    margin: 10px 0;
+    padding: 8px;
+    width: 80%;
+    max-width: 400px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 16px;
+    margin-bottom: 15px;
 }
 
 select {
     padding: 8px;
-    font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    margin-bottom: 15px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
-    background: white;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
 }
 
-th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+thead {
+    background-color: #007bff;
+    color: white;
+}
+
+thead th {
+    padding: 10px;
 }
 
 tbody tr:nth-child(even) {
@@ -41,12 +53,27 @@ tbody tr:nth-child(even) {
 }
 
 tbody tr:hover {
-    background-color: #e2e6ea;
+    background-color: #ddd;
 }
 
-td img {
-    border-radius: 50%;
-    border: 2px solid #ddd;
+td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
 }
 
 #pages {
@@ -54,25 +81,30 @@ td img {
 }
 
 #pages button {
-    padding: 10px 15px;
     margin: 5px;
+    padding: 8px 12px;
     border: none;
-    background-color: #007bff;
+    border-radius: 5px;
+    background-color: #28a745;
     color: white;
     cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
 #pages button:hover {
-    background-color: #0056b3;
+    background-color: #218838;
 }
 
 @media (max-width: 768px) {
     table {
-        font-size: 14px;
+        font-size: 12px;
     }
-    input[type="search"], select {
-        width: 100%;
+    
+thead th, td {
+        padding: 8px;
+    }
+    
+    button {
+        padding: 6px 10px;
     }
 }
