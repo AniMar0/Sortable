@@ -10,6 +10,8 @@ fetch("https://rawcdn.githack.com/akabab/superhero-api/0.2.0/api/all.json")
 
 
 function main(heroes) {
+  sortedData = sortHeros(heroes)
+
   const select = document.getElementById("itemsPerPage");
 
   search(heroes)
@@ -137,4 +139,58 @@ function search(superheroes) {
     });
     showData(filteredHeroes, select.value)
   });
+}
+
+function sortHeros(heros) {
+
+  let SortedHerosafter = {
+    Name: [],
+    FullName: [],
+    intelligence: [],
+    strength: [],
+    speed: [],
+    durability: [],
+    power: [],
+    combat: [],
+    Race: [],
+    Gender: [],
+    Height: [],
+    Weight: [],
+    PlaceofBirth: [],
+    Alignment: []
+  }
+
+  heros.map((hero) => {
+    SortedHerosafter.Name.push(hero.name)
+    SortedHerosafter.FullName.push(hero.biography.fullName)
+    SortedHerosafter.intelligence.push(hero.powerstats['intelligence'])
+    SortedHerosafter.strength.push(hero.powerstats['strength'])
+    SortedHerosafter.speed.push(hero.powerstats['speed'])
+    SortedHerosafter.durability.push(hero.powerstats['durability'])
+    SortedHerosafter.power.push(hero.powerstats['power'])
+    SortedHerosafter.combat.push(hero.powerstats['combat'])
+    SortedHerosafter.Race.push(hero.appearance.race)
+    SortedHerosafter.Gender.push(hero.appearance.gender)
+    SortedHerosafter.Height.push(hero.appearance.height[1])
+    SortedHerosafter.Weight.push(hero.appearance.weight[1])
+    SortedHerosafter.PlaceofBirth.push(hero.biography.placeOfBirth)
+    SortedHerosafter.Alignment.push(hero.biography.alignment)
+  })
+
+  SortedHerosafter.Name = [...SortedHerosafter.Name.sort()]
+  SortedHerosafter.FullName = [...SortedHerosafter.FullName.sort()]
+  SortedHerosafter.intelligence = [...SortedHerosafter.intelligence.sort()]
+  SortedHerosafter.strength = [...SortedHerosafter.strength.sort()]
+  SortedHerosafter.speed = [...SortedHerosafter.speed.sort()]
+  SortedHerosafter.durability = [...SortedHerosafter.durability.sort()]
+  SortedHerosafter.power = [...SortedHerosafter.power.sort()]
+  SortedHerosafter.combat = [...SortedHerosafter.combat.sort()]
+  SortedHerosafter.Race = [...SortedHerosafter.Race.sort()]
+  SortedHerosafter.Gender = [...SortedHerosafter.Gender.sort()]
+  SortedHerosafter.Height = [...SortedHerosafter.Height.sort()]
+  SortedHerosafter.Weight = [...SortedHerosafter.Weight.sort()]
+  SortedHerosafter.PlaceofBirth = [...SortedHerosafter.PlaceofBirth.sort()]
+  SortedHerosafter.Alignment = [...SortedHerosafter.Alignment.sort()]
+
+  return SortedHerosafter
 }
