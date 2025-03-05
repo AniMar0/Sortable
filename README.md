@@ -33,7 +33,7 @@ Sortable is a web application that allows users to view and sort a list of super
 
 ## 👥 Collaborators
 
-- [zkahlaou](https://github.com/AniMar0)
+- [AniMar0](https://github.com/AniMar0)
 - [amellagu](https://learn.zone01oujda.ma/git/amellagu)
 - [kenji20thh](https://github.com/kenji20thh)
 
