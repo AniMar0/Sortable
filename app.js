@@ -2,7 +2,7 @@ fetch("https://rawcdn.githack.com/akabab/superhero-api/0.2.0/api/all.json").then
 
 function main(heroes) {
   let sortedData = sortHeros(heroes)
-
+  initHeroDetailAndAnimations(heroes)
   const select = document.getElementById("itemsPerPage");
 
   mainFuncSorte(sortedData);
@@ -17,29 +17,54 @@ function main(heroes) {
 }
 
 function showData(heroes, count) {
-  const numberOfHeroes = count === 'all' ? heroes.length : parseInt(count);
+  const numberOfHeroes = count === "all" ? heroes.length : Number.parseInt(count)
   const numberOfPages = Math.ceil(heroes.length / numberOfHeroes)
-  const selectPgae = document.getElementById('pages')
-  selectPgae.innerHTML = ""
+  const pagesContainer = document.getElementById("pages")
+  pagesContainer.innerHTML = ""
 
-  const fragmentPages = document.createDocumentFragment()
+  const prevButton = document.createElement("button")
+  prevButton.textContent = "Previous"
+  prevButton.className = "prev-page"
+  prevButton.disabled = true
 
-  for (let index = 1; index <= numberOfPages; index++) {
-    const btn = createElement('button', '' + index, '' + index)
-    fragmentPages.append(btn)
-  }
-  selectPgae.appendChild(fragmentPages)
+  const pageInfo = document.createElement("span")
+  pageInfo.textContent = `Page 1 of ${numberOfPages}`
+  pageInfo.className = "page-info"
 
-  const buttona = document.getElementById('pages')
+  const nextButton = document.createElement("button")
+  nextButton.textContent = "Next"
+  nextButton.className = "next-page"
+  nextButton.disabled = numberOfPages <= 1
 
-  buttona.addEventListener('click', (e) => {
-    if (e.target.id !== "pages") {
-      let page = parseInt(e.target.id)
-      let start = (page - 1) * numberOfHeroes
-      let end = start + numberOfHeroes >= heroes.length ? heroes.length : start + numberOfHeroes
-      showHeros(heroes, start, end);
+  pagesContainer.appendChild(prevButton)
+  pagesContainer.appendChild(pageInfo)
+  pagesContainer.appendChild(nextButton)
+
+  let currentPage = 1
+
+  prevButton.addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--
+      updatePage()
     }
   })
+
+  nextButton.addEventListener("click", () => {
+    if (currentPage < numberOfPages) {
+      currentPage++
+      updatePage()
+    }
+  })
+
+  const updatePage = () => {
+    prevButton.disabled = currentPage === 1
+    nextButton.disabled = currentPage === numberOfPages
+
+    pageInfo.textContent = `Page ${currentPage} of ${numberOfPages}`
+    const start = (currentPage - 1) * numberOfHeroes
+    const end = start + numberOfHeroes >= heroes.length ? heroes.length : start + numberOfHeroes
+    showHeros(heroes, start, end)
+  }
   showHeros(heroes, 0, numberOfHeroes)
 }
 
@@ -217,3 +242,94 @@ function cmTometers(height) {
 function klg(weight) {
   return weight.includes("kg") ? parseFloat(weight) : parseFloat(weight) * 1000;
 }
+
+
+// ----------------- Show One Hero --------------------------- 
+
+
+let heroDetail
+let closeButton
+let floatingHeroes
+let heroesGrouped = false
+
+function initHeroDetailAndAnimations(heroes) {
+
+  heroDetail = document.getElementById("hero-detail")
+  closeButton = document.querySelector(".close-button")
+  floatingHeroes = document.querySelectorAll(".floating-hero")
+
+  if (closeButton) {
+    closeButton.addEventListener("click", () => {
+      heroDetail.classList.remove("active")
+    })
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && heroDetail.classList.contains("active")) {
+      heroDetail.classList.remove("active")
+    }
+  })
+
+  const heroTableBody = document.getElementById("heroTableBody")
+  if (heroTableBody) {
+    heroTableBody.addEventListener("click", (e) => {
+      const row = e.target.closest("tr")
+      if (row) {
+        const heroName = row.cells[1].textContent
+        const hero = heroes.find((h) => h.name === heroName)
+        if (hero) {
+          showHeroDetail(hero)
+        }
+      }
+    })
+  }
+
+  const sortButtons = document.querySelectorAll("#heroTable th button")
+  sortButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      animateHeroesFighting()
+    })
+  })
+}
+
+const animateHeroesFighting = () => {
+  const headerElement = document.querySelector("header")
+
+  if (!heroesGrouped) {
+    headerElement.classList.add("hero-grouped")
+    heroesGrouped = true
+  } else {
+    headerElement.classList.remove("hero-grouped")
+    heroesGrouped = false
+  }
+}
+
+const showHeroDetail = (hero) => {
+  document.getElementById("detail-hero-name").textContent = hero.name
+  document.getElementById("detail-full-name").textContent = hero.biography.fullName || "Unknown"
+  document.getElementById("detail-image").src = hero.images.md
+
+  const stats = ["intelligence", "strength", "speed", "durability", "power", "combat"]
+  stats.forEach((stat) => {
+    const value = hero.powerstats[stat] || 0
+    document.getElementById(`stat-${stat}`).style.width = `${value}%`
+    document.getElementById(`value-${stat}`).textContent = value
+  })
+
+  document.getElementById("detail-race").textContent = hero.appearance.race || "Unknown"
+  document.getElementById("detail-gender").textContent = hero.appearance.gender || "Unknown"
+  document.getElementById("detail-height").textContent = hero.appearance.height.join(" / ") || "Unknown"
+  document.getElementById("detail-weight").textContent = hero.appearance.weight.join(" / ") || "Unknown"
+  document.getElementById("detail-eye-color").textContent = hero.appearance.eyeColor || "Unknown"
+  document.getElementById("detail-hair-color").textContent = hero.appearance.hairColor || "Unknown"
+
+  document.getElementById("detail-place-of-birth").textContent = hero.biography.placeOfBirth || "Unknown"
+  document.getElementById("detail-alignment").textContent = hero.biography.alignment || "Unknown"
+  document.getElementById("detail-publisher").textContent = hero.biography.publisher || "Unknown"
+  document.getElementById("detail-first-appearance").textContent = hero.biography.firstAppearance || "Unknown"
+  document.getElementById("detail-alter-egos").textContent = hero.biography.alterEgos || "None"
+  document.getElementById("detail-aliases").textContent = hero.biography.aliases.join(", ") || "None"
+
+  heroDetail.classList.add("active")
+}
+

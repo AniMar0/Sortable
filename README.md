@@ -31,6 +31,12 @@ Sortable is a web application that allows users to view and sort a list of super
 - [style.css](https://github.com/AniMar0/Sortable/blob/main/style.css): The CSS file that contains the styles for the web page.
 - [app.js](https://github.com/AniMar0/Sortable/blob/main/app.js): The JavaScript file that contains the logic for fetching data, sorting, searching, and pagination.
 
+## 👥 Collaborators
+
+- [zkahlaou](https://github.com/AniMar0)
+- [amellagu](https://learn.zone01oujda.ma/git/amellagu)
+- [kenji20thh](https://github.com/kenji20thh)
+
 ## 📜 License
 
 This project is licensed under the MIT License.
